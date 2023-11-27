@@ -156,7 +156,7 @@
             <option value="31">31</option>
           </select>
           <label style="font-size:13px">月</label>
-          @error('birth_day')
+          @error('old_day')
           <div>{{ $message }}</div>
           @enderror
         </div>

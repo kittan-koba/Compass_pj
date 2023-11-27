@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\Users\User;
+use App\Http\Requests\UserRegistrationRequest;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\View\View;
 use DB;
 
 use App\Models\Users\Subjects;
@@ -51,7 +54,7 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\User
      */
-    public function registerView()
+    public function registerView(): Factory|View
     {
         $subjects = Subjects::all();
         return view('auth.register.register', compact('subjects'));

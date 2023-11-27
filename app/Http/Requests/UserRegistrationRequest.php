@@ -41,10 +41,10 @@ class UserRegistrationRequest extends FormRequest
     public function messages()
     {
         return [
-            'over_name_kana.regex' => 'カタカナのみを入力してください。',
-            'old_year.date_format' => '正しい日付を入力してください。',
-            'old_month.date_format' => '正しい日付を入力してください。',
-            'old_day.date_format' => '正しい日付を入力してください.',
+            'mail_address' => '※メール形式で入力してください。',
+            'old_year' => '※生年月日が未入力です。',
+            'old_month' => '※生年月日が未入力です。',
+            'old_day' => '※生年月日が未入力です。',
         ];
     }
 }
