@@ -84,7 +84,7 @@ class User extends Authenticatable
 
     public function subjects()
     {
-        return $this->belongsToMany('App\Subject');
+        return $this->belongsToMany('App\Models\Users\Subjects');
     }
 
     // いいねしているかどうか
