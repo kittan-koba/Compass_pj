@@ -48,6 +48,7 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+
     /**
      * Create a new user instance after a valid registration.
      *
@@ -58,6 +59,20 @@ class RegisterController extends Controller
     {
         $subjects = Subjects::all();
         return view('auth.register.register', compact('subjects'));
+    }
+
+
+    public function store(UserRegistrationRequest $request)
+    {
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'mail_address' =>
+                ['required|string|email|max:255|unique:users,mail,'],
+        ], [
+            'mail_address.unique' => '入力されたメールアドレスは既に使用されています。',
+            'mail_address.email' => '正しいメールアドレスの形式で入力してください。',
+        ]);
+
     }
 
     public function registerPost(Request $request)
@@ -90,5 +105,9 @@ class RegisterController extends Controller
             DB::rollback();
             return redirect()->route('loginView');
         }
+        if ($validator->fails()) {
+            return redirect()->route('registerView')->withErrors($validator)->withInput();
+        }
+
     }
 }
