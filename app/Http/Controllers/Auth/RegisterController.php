@@ -5,13 +5,10 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\Users\User;
-use App\Http\Requests\UserRegistrationRequest;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\View\View;
 use DB;
 
 use App\Models\Users\Subjects;
@@ -48,37 +45,22 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-
     /**
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
      * @return \App\User
      */
-    public function registerView(): Factory|View
+    public function registerView()
     {
         $subjects = Subjects::all();
         return view('auth.register.register', compact('subjects'));
     }
 
-
-    public function store(UserRegistrationRequest $request)
-    {
-        $data = $request->all();
-        $validator = Validator::make($data, [
-            'mail_address' =>
-                ['required|string|email|max:255|unique:users,mail,'],
-        ], [
-            'mail_address.unique' => '入力されたメールアドレスは既に使用されています。',
-            'mail_address.email' => '正しいメールアドレスの形式で入力してください。',
-        ]);
-
-    }
-
     public function registerPost(Request $request)
     {
         DB::beginTransaction();
-        try {
+        try{
             $old_year = $request->old_year;
             $old_month = $request->old_month;
             $old_day = $request->old_day;
@@ -95,19 +77,15 @@ class RegisterController extends Controller
                 'sex' => $request->sex,
                 'birth_day' => $birth_day,
                 'role' => $request->role,
-                'password' => Hash::make($request->password)
+                'password' => bcrypt($request->password)
             ]);
             $user = User::findOrFail($user_get->id);
             $user->subjects()->attach($subjects);
             DB::commit();
             return view('auth.login.login');
-        } catch (\Exception $e) {
+        }catch(\Exception $e){
             DB::rollback();
             return redirect()->route('loginView');
         }
-        if ($validator->fails()) {
-            return redirect()->route('registerView')->withErrors($validator)->withInput();
-        }
-
     }
 }

@@ -48,12 +48,6 @@ class RegExMatch implements \ArrayAccess, \Countable, \IteratorAggregate
     /** @var string */
     public $input;
 
-    /** @var string */
-    public $type;
-
-    /** @var Mode|string */
-    public $rule;
-
     /**
      * @param array<int, string|null> $results
      */

@@ -17,6 +17,7 @@ class Subjects extends Model
 
     public function users()
     {
+        //リレーション定義
         return $this->belongsToMany('App\Models\Users\User');
     }
 }

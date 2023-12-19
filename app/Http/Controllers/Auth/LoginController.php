@@ -48,19 +48,12 @@ class LoginController extends Controller
 
     public function loginPost(Request $request)
     {
-        $this->validate($request, [
-            'mail_address' => 'required|email',
-            'password' => 'required',
-        ]);
-
-        $userdata = $request->only('mail_address', 'password');
-        // dd($userdata);
+        $userdata = $request -> only('mail_address', 'password');
         if (Auth::attempt($userdata)) {
-            return redirect('/top'); // トップページへのリダイレクト
-        } else {
-            return redirect('/login')->with('flash_message', 'メールアドレスまたはパスワードが正しくありません')->withInput();
+            return redirect('/top');
+        }else{
+            return redirect('/login')->with('flash_message', 'name or password is incorrect');
         }
-
     }
 
 }

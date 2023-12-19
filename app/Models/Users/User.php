@@ -6,7 +6,6 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Hash;
 
 use App\Models\Posts\Like;
 use Auth;
@@ -23,17 +22,6 @@ class User extends Authenticatable
      *
      * @var array
      */
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($user) {
-            // ユーザーパスワードをハッシュ化
-            $user->password = Hash::make($user->password);
-        });
-    }
-
     protected $fillable = [
         'over_name',
         'under_name',
@@ -54,8 +42,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password', 'remember_token',
     ];
 
     /**
@@ -84,7 +71,9 @@ class User extends Authenticatable
 
     public function subjects()
     {
+        // リレーションの定義
         return $this->belongsToMany('App\Models\Users\Subjects');
+
     }
 
     // いいねしているかどうか
@@ -97,7 +86,4 @@ class User extends Authenticatable
     {
         return Like::where('like_user_id', Auth::id());
     }
-
-
-
 }
