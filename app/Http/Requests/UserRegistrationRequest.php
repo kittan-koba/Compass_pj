@@ -1,39 +1,31 @@
 <?php
 
+// app/Http/Requests/UserRegistrationRequest.php
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserRegistrationRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
             'over_name' => 'required|string|max:10',
             'under_name' => 'required|string|max:10',
-            'over_name_kana' => 'required|string|max:30|regex:/^[\p{Katakana}\s]+$/u',
-            'under_name_kana' => 'required|string|max:30|regex:/^[\p{Katakana}\s]+$/u',
-            'mail_address' => 'required|email|unique:users|max:100',
+            'over_name_kana' => 'required|string|regex:/^[ァ-ヶー]+$/u|max:30',
+            'under_name_kana' => 'required|string|regex:/^[ァ-ヶー]+$/u|max:30',
+            'mail_address' => 'required|email|max:100|unique:users,email',
             'sex' => 'required|in:男性,女性,その他',
-            'old_year' => 'required|date_format:Y-m-d|after_or_equal:2000-01-01|before_or_equal:' . now()->format('Y-m-d'),
-            'old_month' => 'required|date_format:Y-m-d|after_or_equal:2000-01-01|before_or_equal:' . now()->format('Y-m-d'),
-            'old_day' => 'required|date_format:Y-m-d|after_or_equal:2000-01-01|before_or_equal:' . now()->format('Y-m-d'),
-            'role' => 'required|in:講師(国語),講師(数学),講師(英語),生徒',
+            'old_year' => 'required|date|after_or_equal:2000-01-01|before_or_equal:today',
+            'old_month' => 'required|date_format:m|after_or_equal:2000-01-01|before_or_equal:today',
+            'old_day' => 'required|date_format:d|after_or_equal:2000-01-01|before_or_equal:today',
+            'role' => 'required|in:講師(国語),講師(数学),教師(英語),生徒',
             'password' => 'required|string|min:8|max:30|confirmed',
         ];
     }
@@ -41,10 +33,16 @@ class UserRegistrationRequest extends FormRequest
     public function messages()
     {
         return [
-            'mail_address' => '※メール形式で入力してください。',
-            'old_year' => '※生年月日が未入力です。',
-            'old_month' => '※生年月日が未入力です。',
-            'old_day' => '※生年月日が未入力です。',
+            // 各フィールドごとのバリデーションメッセージを追加
+            'over_name.max' => 'over_nameは10文字以内で入力してください。',
+            'under_name.max' => 'under_nameは10文字以内で入力してください。',
+            'over_name_kana.regex' => 'over_name_kanaはカタカナのみで入力してください。',
+            'under_name_kana.regex' => 'under_name_kanaはカタカナのみで入力してください。',
+            'mail_address.unique' => 'このメールアドレスはすでに使用されています。',
+            'old_year.*' => '生年月日が正しくありません。',
+            'old_month.*' => '生年月日が正しくありません。',
+            'old_day.*' => '生年月日が正しくありません。',
+            'password.confirmed' => 'パスワードと確認用パスワードが一致しません。',
         ];
     }
 }

@@ -15,42 +15,15 @@ use App\Models\Users\Subjects;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
     use RegistersUsers;
 
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
     protected $redirectTo = RouteServiceProvider::HOME;
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest');
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
     public function registerView()
     {
         $subjects = Subjects::all();
@@ -59,8 +32,10 @@ class RegisterController extends Controller
 
     public function registerPost(Request $request)
     {
+        $this->validator($request->all())->validate();
+
         DB::beginTransaction();
-        try{
+        try {
             $old_year = $request->old_year;
             $old_month = $request->old_month;
             $old_day = $request->old_day;
@@ -77,15 +52,50 @@ class RegisterController extends Controller
                 'sex' => $request->sex,
                 'birth_day' => $birth_day,
                 'role' => $request->role,
-                'password' => bcrypt($request->password)
+                'password' => bcrypt($request->password),
             ]);
+
             $user = User::findOrFail($user_get->id);
             $user->subjects()->attach($subjects);
+
             DB::commit();
             return view('auth.login.login');
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->route('loginView');
+            return redirect()->route('loginView')->with('error', '登録に失敗しました。');
         }
+    }
+
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'over_name' => ['required', 'string', 'max:10'],
+            'under_name' => ['required', 'string', 'max:10'],
+            'over_name_kana' => ['required', 'string', 'regex:/^[ァ-ヶー]+$/u', 'max:30'],
+            'under_name_kana' => ['required', 'string', 'regex:/^[ァ-ヶー]+$/u', 'max:30'],
+            'mail_address' => ['required', 'email', 'max:100', 'unique:users,email'],
+            'sex' => ['required', 'in:男性,女性,その他'],
+            'old_year' => ['required', 'date', 'after_or_equal:2000-01-01', 'before_or_equal:today'],
+            'old_month' => ['required', 'date_format:m', 'after_or_equal:2000-01-01', 'before_or_equal:today'],
+            'old_day' => ['required', 'date_format:d', 'after_or_equal:2000-01-01', 'before_or_equal:today'],
+            'role' => ['required', 'in:教師(国語),教師(数学),教師(英語),生徒'],
+            'password' => ['required', 'string', 'min:8', 'max:30', 'confirmed'],
+        ], $this->validationMessages());
+    }
+
+    protected function validationMessages()
+    {
+        return [
+            // バリデーションメッセージのカスタマイズを追加
+            'over_name.max' => 'over_nameは10文字以内で入力してください。',
+            'under_name.max' => 'under_nameは10文字以内で入力してください。',
+            'over_name_kana.regex' => 'over_name_kanaはカタカナのみで入力してください。',
+            'under_name_kana.regex' => 'under_name_kanaはカタカナのみで入力してください。',
+            'mail_address.unique' => 'このメールアドレスはすでに使用されています。',
+            'old_year.*' => '生年月日が正しくありません。',
+            'old_month.*' => '生年月日が正しくありません。',
+            'old_day.*' => '生年月日が正しくありません。',
+            'password.confirmed' => 'パスワードと確認用パスワードが一致しません。',
+        ];
     }
 }
