@@ -42,7 +42,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -73,7 +74,11 @@ class User extends Authenticatable
     {
         // リレーションの定義
         return $this->belongsToMany('App\Models\Users\Subjects');
+    }
 
+    public function isInstructor()
+    {
+        return $this->role === '1';
     }
 
     // いいねしているかどうか
