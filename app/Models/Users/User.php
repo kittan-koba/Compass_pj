@@ -78,7 +78,7 @@ class User extends Authenticatable
 
     public function isInstructor()
     {
-        return $this->role === '1';
+        return $this->role === '4';
     }
 
     // いいねしているかどうか
@@ -91,4 +91,11 @@ class User extends Authenticatable
     {
         return Like::where('like_user_id', Auth::id());
     }
+
+    public function role()
+    {
+        return $this->attributes['role']; // または適切なプロパティ名を使用して取得
+    }
+
+
 }
