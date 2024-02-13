@@ -23,6 +23,8 @@ class PostFormRequest extends FormRequest
      */
     public function rules()
     {
+        $main_category = Category::get('id')->implode('id', ',');
+
         return [
             'post_category_id' => 'required|exists:sub_categories,id',
             'post_title' => 'min:4|max:50',

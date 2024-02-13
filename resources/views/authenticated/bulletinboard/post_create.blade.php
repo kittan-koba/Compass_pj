@@ -51,4 +51,26 @@
   </div>
   @endcan
 </div>
+
+@if(isset($post))
+<div class="post_edit_container d-flex">
+  <div class="post_edit_area border w-50 m-5 p-5">
+    <form action="{{ route('post.edit', ['post_id' => $post->id]) }}" method="post">
+      @csrf
+      <div class="">
+        <p class="mb-0">タイトル</p>
+        <input type="text" class="w-100" name="post_title" value="{{ $post->post_title }}">
+      </div>
+      <div class="mt-3">
+        <p class="mb-0">投稿内容</p>
+        <textarea class="w-100" name="post_body">{{ $post->post_body }}</textarea>
+      </div>
+      <div class="mt-3 text-right">
+        <input type="submit" class="btn btn-primary" value="更新">
+      </div>
+    </form>
+  </div>
+</div>
+@endif
+
 @endsection

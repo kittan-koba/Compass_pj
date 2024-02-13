@@ -61,18 +61,32 @@ class PostsController extends Controller
         return redirect()->route('post.show');
     }
 
-    public function postEdit(Request $request)
+    public function postEditView($post_id)
     {
-        Post::where('id', $request->post_id)->update([
-            'post_title' => $request->post_title,
-            'post' => $request->post_body,
-        ]);
-        return redirect()->route('post.detail', ['id' => $request->post_id]);
+        $post = Post::findOrFail($post_id);
+        return view('authenticated.bulletinboard.post_edit', compact('post'));
     }
 
-    public function postDelete($id)
+    // 投稿更新
+    public function postEdit(Request $request, $post_id)
     {
-        Post::findOrFail($id)->delete();
+        $this->validate($request, [
+            'post_title' => 'required|max:255',
+            'post_body' => 'required',
+        ]);
+
+        Post::where('id', $post_id)->update([
+            'post_title' => $request->post_title,
+            'post_body' => $request->post_body,
+        ]);
+
+        return redirect()->route('post.detail', ['post_id' => $post_id]);
+    }
+
+    // 投稿削除
+    public function postDelete($post_id)
+    {
+        Post::findOrFail($post_id)->delete();
         return redirect()->route('post.show');
     }
     public function mainCategoryCreate(Request $request)
