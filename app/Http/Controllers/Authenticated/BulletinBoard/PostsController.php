@@ -21,7 +21,7 @@ class PostsController extends Controller
         $categories = MainCategory::get();
         $like = new Like;
         $post_comment = new Post;
-        if (!empty($request->keyword)) {
+        if (!empty ($request->keyword)) {
             $posts = Post::with('user', 'postComments')
                 ->where('post_title', 'like', '%' . $request->keyword . '%')
                 ->orWhere('post', 'like', '%' . $request->keyword . '%')->get();
@@ -67,27 +67,28 @@ class PostsController extends Controller
         return view('authenticated.bulletinboard.post_edit', compact('post'));
     }
 
-    // 投稿更新
-    public function postEdit(Request $request, $post_id)
+    public function postEdit(Request $request)
     {
-        $this->validate($request, [
-            'post_title' => 'required|max:255',
-            'post_body' => 'required',
-        ]);
+        // $this->validate($request, [
+        //     'post_title' => 'required|max:255',
+        //     'post' => 'required',
+        // ]);
 
-        Post::where('id', $post_id)->update([
+        Post::where('id', $request->post_id)->update([
             'post_title' => $request->post_title,
-            'post_body' => $request->post_body,
+            'post' => $request->post,
         ]);
 
-        return redirect()->route('post.detail', ['post_id' => $post_id]);
+        return redirect()->route('post.detail', ['id' => $request->post_id]);
+        // 更新後に投稿詳細ページにリダイレクト
     }
+
 
     // 投稿削除
     public function postDelete($post_id)
     {
         Post::findOrFail($post_id)->delete();
-        return redirect()->route('post.show');
+        return redirect()->route('post.show')->with('status', '削除しました');
     }
     public function mainCategoryCreate(Request $request)
     {

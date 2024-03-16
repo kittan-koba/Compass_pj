@@ -3,6 +3,7 @@
 namespace App\Http\Requests\BulletinBoard;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Categories\MainCategory;
 
 class PostFormRequest extends FormRequest
 {
@@ -23,10 +24,10 @@ class PostFormRequest extends FormRequest
      */
     public function rules()
     {
-        $main_category = Category::get('id')->implode('id', ',');
+        $main_category = MainCategory::get('id')->implode('id', ',');
 
         return [
-            'post_category_id' => 'required|exists:sub_categories,id',
+
             'post_title' => 'min:4|max:50',
             'post_body' => 'min:10|max:500',
         ];
