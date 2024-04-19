@@ -7,8 +7,8 @@
       <p class="mb-0">カテゴリー</p>
       <select class="w-100" form="postCreate" name="post_category_id">
         @foreach($main_categories as $main_category)
-        <optgroup label="{{ $main_category->main_category }}"></optgroup>
-        <!-- サブカテゴリー表示 -->
+        <optgroup label="{{ $main_category->main_category }}">
+          <!-- サブカテゴリー表示 -->
         </optgroup>
         @endforeach
       </select>
@@ -37,22 +37,30 @@
     <div class="category_area mt-5 p-5">
       <div class="">
         <p class="m-0">メインカテゴリー</p>
-        <input type="text" class="w-100" name="main_category_name" form="mainCategoryRequest">
-        <input type="submit" value="追加" class="w-100 btn btn-primary p-0" form="mainCategoryRequest">
+        <input type="text" class="w-100" name="main_category_name" form="MainCategoryRequest">
+        <input type="submit" value="追加" class="w-100 btn btn-primary p-0" form="MainCategoryRequest">
       </div>
       <div class="">
         <p class="m-0">サブカテゴリー</p>
-        <input type="text" class="w-100" name="sub_category_name" form="mainCategoryRequest">
-        <input type="submit" value="追加" class="w-100 btn btn-primary p-0" form="mainCategoryRequest">
+        <select class="w-100">
+          <option value="" hidden>----------</option>
+          @foreach($main_categories as $main_category)
+          @foreach($main_category->sub_categories as $sub_category)
+          <option value="{{ $sub_category->id }}">{{ $sub_category->sub_category }}</option>
+          @endforeach
+          @endforeach
+        </select>
+        <input type="text" class="w-100" name="sub_category_name" form="MainCategoryRequest">
+        <input type="submit" value="追加" class="w-100 btn btn-primary p-0" form="MainCategoryRequest">
       </div>
       <!-- サブカテゴリー追加 -->
-      <form action="{{ route('main.category.create') }}" method="post" id="mainCategoryRequest">{{ csrf_field() }}</form>
+      <form action="{{ route('main.category.create') }}" method="post" id="MainCategoryRequest">{{ csrf_field() }}</form>
     </div>
   </div>
   @endcan
 </div>
 
-@if(isset($post))
+@if(isset ($post))
 <div class="post_edit_container d-flex">
   <div class="post_edit_area border w-50 m-5 p-5">
     <form action="{{ route('post.edit', ['post_id' => $post->id]) }}" method="post">
