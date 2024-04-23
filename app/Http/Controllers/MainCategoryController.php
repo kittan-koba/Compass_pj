@@ -19,7 +19,7 @@ class MainCategoryController extends Controller
         // サブカテゴリーの登録処理
         foreach ($request->input('sub_categories') as $sub_category_name) {
             $subCategory = new SubCategory;
-            $subCategory->main_category_id = $mainCategory->id; // メインカテゴリーの ID を取得
+            $subCategory->main_category_id = $mainCategory->main_category_id; // メインカテゴリーの ID を取得
             $subCategory->sub_category = $sub_category_name;
             $subCategory->save();
         }

@@ -34,15 +34,15 @@ class UserRegistrationRequest extends FormRequest
     {
         return [
             // 各フィールドごとのバリデーションメッセージを追加
-            'over_name.max' => 'over_nameは10文字以内で入力してください。',
-            'under_name.max' => 'under_nameは10文字以内で入力してください。',
-            'over_name_kana.regex' => 'over_name_kanaはカタカナのみで入力してください。',
-            'under_name_kana.regex' => 'under_name_kanaはカタカナのみで入力してください。',
-            'mail_address.unique' => 'このメールアドレスはすでに使用されています。',
-            'old_year.*' => '生年月日が正しくありません。',
-            'old_month.*' => '生年月日が正しくありません。',
-            'old_day.*' => '生年月日が正しくありません。',
-            'password.confirmed' => 'パスワードと確認用パスワードが一致しません。',
+            'over_name' => 'over_nameは10文字以内で入力してください。',
+            'under_name' => 'under_nameは10文字以内で入力してください。',
+            'over_name_kana' => 'over_name_kanaはカタカナのみで入力してください。',
+            'under_name_kana' => 'under_name_kanaはカタカナのみで入力してください。',
+            'mail_address' => 'このメールアドレスはすでに使用されています。',
+            'old_year' => '生年月日が正しくありません。',
+            'old_month' => '生年月日が正しくありません。',
+            'old_day' => '生年月日が正しくありません。',
+            'password' => 'パスワードと確認用パスワードが一致しません。',
         ];
     }
 }

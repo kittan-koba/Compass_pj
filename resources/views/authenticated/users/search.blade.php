@@ -91,17 +91,23 @@
           </div>
           <div class="selected_engineer">
             <label>選択科目</label>
+            <select name="subject" form="userSearchRequest">
+              <!-- 選択科目の追加 -->
+              <option selected disabled>選択してください</option> <!-- 初期選択項目 -->
+              @foreach($subjects as $subject)
+              <option value="{{ $subject->id }}">{{ $subject->subject }}</option> <!-- 選択肢をループで表示 -->
+              @endforeach
+            </select>
           </div>
         </div>
+        <div>
+          <input type="reset" value="リセット" form="userSearchRequest">
+        </div>
+        <div>
+          <input type="submit" name="search_btn" value="検索" form="userSearchRequest">
+        </div>
       </div>
-      <div>
-        <input type="reset" value="リセット" form="userSearchRequest">
-      </div>
-      <div>
-        <input type="submit" name="search_btn" value="検索" form="userSearchRequest">
-      </div>
+      <form action="{{ route('user.show') }}" method="get" id="userSearchRequest"></form>
     </div>
-    <form action="{{ route('user.show') }}" method="get" id="userSearchRequest"></form>
   </div>
-</div>
-@endsection
+  @endsection

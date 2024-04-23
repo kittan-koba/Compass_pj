@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use App\Models\Users\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator; // 追加
 
 use Illuminate\Http\Request;
 use DB;
@@ -32,7 +33,21 @@ class RegisterController extends Controller
 
     public function registerPost(Request $request)
     {
-        $this->validator($request->all())->validate();
+        // $this->validator($request->all())->validate(); // 修正
+        $this->validate($request, [ // 修正
+            'over_name' => 'required|string|max:255',
+            'under_name' => 'required|string|max:255',
+            'over_name_kana' => 'required|string|max:255',
+            'under_name_kana' => 'required|string|max:255',
+            'mail_address' => 'required|string|email|max:255|unique:users',
+            'sex' => 'required|integer',
+            'old_year' => 'required|date|after_or_equal:2000-01-01|before_or_equal:today',
+            'old_month' => 'required|date_format:m|after_or_equal:2000-01-01|before_or_equal:today',
+            'old_day' => 'required|date_format:d|after_or_equal:2000-01-01|before_or_equal:today',
+            'password' => 'required|string|min:8|max:30|confirmed',
+            'subject' => 'required|array', // 配列であることを検証
+            'subject.*' => 'required|integer', // 配列の各要素が整数であることを検証
+        ]);
 
         DB::beginTransaction();
         try {
@@ -66,5 +81,40 @@ class RegisterController extends Controller
         }
     }
 
+    // バリデーションメソッドを追加
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'over_name' => 'required|string|max:255',
+            'under_name' => 'required|string|max:255',
+            'over_name_kana' => 'required|string|max:255',
+            'under_name_kana' => 'required|string|max:255',
+            'mail_address' => 'required|string|email|max:255|unique:users',
+            'sex' => 'required|integer',
+            'old_year' => 'required|date|after_or_equal:2000-01-01|before_or_equal:today',
+            'old_month' => 'required|date_format:m|after_or_equal:2000-01-01|before_or_equal:today',
+            'old_day' => 'required|date_format:d|after_or_equal:2000-01-01|before_or_equal:today',
+            'role' => 'required|integer',
+            'password' => 'required|string|min:8|max:30|confirmed',
+            'subject' => 'required|array',
+            'subject.*' => 'required|integer',
+        ]);
+
+    }
+    public function messages()
+    {
+        return [
+            // 各フィールドごとのバリデーションメッセージを追加
+            'over_name' => 'over_nameは10文字以内で入力してください。',
+            'under_name' => 'under_nameは10文字以内で入力してください。',
+            'over_name_kana' => 'over_name_kanaはカタカナのみで入力してください。',
+            'under_name_kana' => 'under_name_kanaはカタカナのみで入力してください。',
+            'mail_address' => 'このメールアドレスはすでに使用されています。',
+            'old_year' => '生年月日が正しくありません。',
+            'old_month' => '生年月日が正しくありません。',
+            'old_day' => '生年月日が正しくありません。',
+            'password' => 'パスワードと確認用パスワードが一致しません。',
+        ];
+    }
 
 }
