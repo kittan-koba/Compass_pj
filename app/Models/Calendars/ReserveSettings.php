@@ -3,6 +3,8 @@
 namespace App\Models\Calendars;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User;
+
 
 class ReserveSettings extends Model
 {
@@ -15,7 +17,8 @@ class ReserveSettings extends Model
         'limit_users',
     ];
 
-    public function users(){
-        return $this->belongsToMany('App\Models\Users\User', 'reserve_setting_users', 'reserve_setting_id', 'user_id')->withPivot('reserve_setting_id', 'id');
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_reserve_settings', 'reserve_setting_id', 'user_id');
     }
 }

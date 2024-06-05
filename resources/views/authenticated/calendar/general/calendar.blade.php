@@ -15,4 +15,54 @@
     </div>
   </div>
 </div>
+
+<!-- フラッシュメッセージの表示 -->
+@if (session('success'))
+<div class="alert alert-success">
+  {{ session('success') }}
+</div>
+@endif
+
+@if (session('error'))
+<div class="alert alert-danger">
+  {{ session('error') }}
+</div>
+@endif
+
+<!-- キャンセル確認モーダル -->
+<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">キャンセル確認</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>予約日: <span id="modal-date"></span></p>
+        <p>予約時間: <span id="modal-time"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+        <button type="button" class="btn btn-danger" id="confirmCancel">キャンセルする</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.cancel-button').forEach(button => {
+    button.addEventListener('click', function() {
+      const date = this.dataset.date;
+      const time = this.dataset.time;
+      document.getElementById('modal-date').innerText = date;
+      document.getElementById('modal-time').innerText = time;
+      $('#cancelModal').modal('show');
+    });
+  });
+});
+</script>

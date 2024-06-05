@@ -6,6 +6,8 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Calendars\ReserveSettings;
+
 
 use App\Models\Posts\Like;
 use Auth;
@@ -67,7 +69,7 @@ class User extends Authenticatable
 
     public function reserveSettings()
     {
-        return $this->belongsToMany('App\Models\Calendars\ReserveSettings', 'reserve_setting_users', 'user_id', 'reserve_setting_id')->withPivot('id');
+        return $this->belongsToMany(ReserveSettings::class, 'user_reserve_settings', 'user_id', 'reserve_setting_id');
     }
 
     public function subjects()

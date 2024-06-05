@@ -15,6 +15,7 @@ class CreateReserveSettingUsersTable extends Migration
     {
         Schema::create('reserve_setting_users', function (Blueprint $table) {
             $table->integer('id')->autoIncrement()->comment('id');
+            $table->unsignedBigInteger('user_id');
             $table->integer('user_id')->comment('ユーザーid');
             $table->integer('reserve_setting_id')->comment('カレンダーid');
             $table->timestamp('created_at')->nullable()->comment('登録日時');

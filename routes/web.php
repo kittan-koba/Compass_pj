@@ -37,6 +37,14 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::get('/calendar/{date}/{part}', 'CalendarsController@reserveDetail')->name('calendar.admin.detail');
                 Route::get('/setting/{user_id}/admin', 'CalendarsController@reserveSettings')->name('calendar.admin.setting');
                 Route::post('/setting/update/admin', 'CalendarsController@updateSettings')->name('calendar.admin.update');
+                Route::get('/calendar', 'Authenticated\Calendar\Admin\CalendarsController@show')->name('calendar.show');
+                Route::post('/cancel-reservation/{id}', 'Authenticated\Calendar\Admin\CalendarsController@cancelReservation')->name('cancel.reservation');
+                Route::get('calendar/reserve_detail/{date}/{part}', 'Authenticated\Calendar\Admin\CalendarsController@reserveDetail')->name('calendar.reserve_detail');
+
+
+
+
+
             });
         });
         Route::namespace ('BulletinBoard')->group(function () {
