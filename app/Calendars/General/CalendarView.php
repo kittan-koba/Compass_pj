@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Calendars\General;
 
 use Carbon\Carbon;
@@ -7,8 +6,8 @@ use Auth;
 
 class CalendarView
 {
-  private $carbon;
 
+  private $carbon;
   function __construct($date)
   {
     $this->carbon = new Carbon($date);
@@ -37,47 +36,48 @@ class CalendarView
     $html[] = '</thead>';
     $html[] = '<tbody>';
     $weeks = $this->getWeeks();
-
     foreach ($weeks as $week) {
       $html[] = '<tr class="' . $week->getClassName() . '">';
-      $days = $week->getDays();
 
+      $days = $week->getDays();
       foreach ($days as $day) {
         $startDay = $this->carbon->copy()->format("Y-m-01");
-        $toDay = Carbon::today()->format("Y-m-d");
+        $toDay = $this->carbon->copy()->format("Y-m-d");
         $isPast = $day->everyDay() < $toDay;
-        $isValidDay = $day->everyDay() >= $startDay && $day->everyDay() <= $this->carbon->copy()->endOfMonth()->format("Y-m-d");
-
-        $html[] = '<td class="calendar-td" style="background-color:' . ($isPast ? '#ccc' : '#fff') . ';">';
-
-        if ($isValidDay) {
-          $html[] = $day->render();
-
-          if ($isPast) {
-            $reservations = $day->authReserveDate($day->everyDay());
-            if ($reservations->isEmpty()) {
-              $html[] = '<p>受付終了</p>';
-            } else {
-              $html[] = '<p>参加した部数: ' . $reservations->count() . '</p>';
-            }
-          } else {
-            if (in_array($day->everyDay(), $day->authReserveDay())) {
-              $reservePart = $day->authReserveDate($day->everyDay())->first()->setting_part;
-              $reservePartText = $this->getReservePartText($reservePart);
-              $html[] = '<button type="submit" class="btn btn-danger p-0 w-75" name="delete_date" style="font-size:12px" value="' . $day->authReserveDate($day->everyDay())->first()->setting_reserve . '">' . $reservePartText . '</button>';
-              $html[] = '<input type="hidden" name="getPart[]" value="" form="reserveParts">';
-            } else {
-              $html[] = $day->selectPart($day->everyDay());
-            }
-          }
-          $html[] = $day->getDate();
+        if ($startDay <= $day->everyDay() && $toDay >= $day->everyDay()) {
+          $html[] = '<td class="calendar-td">';
+        } else {
+          $html[] = '<td class="calendar-td ' . $day->getClassName() . '">';
         }
+        $html[] = '<td class="calendar-td" style="background-color:' . ($isPast ? '#ccc' : '#fff') . ';">';
+        $html[] = $day->render();
 
+
+
+        if (in_array($day->everyDay(), $day->authReserveDay())) {
+          $reservePart = $day->authReserveDate($day->everyDay())->first()->setting_part;
+          if ($reservePart == 1) {
+            $reservePart = "リモ1部";
+          } else if ($reservePart == 2) {
+            $reservePart = "リモ2部";
+          } else if ($reservePart == 3) {
+            $reservePart = "リモ3部";
+          }
+          if ($startDay <= $day->everyDay() && $toDay >= $day->everyDay()) {
+            $html[] = '<p class="m-auto p-0 w-75" style="font-size:12px">受付終了</p>';
+            $html[] = '<input type="hidden" name="getPart[]" value="" form="reserveParts">';
+          } else {
+            $html[] = '<button type="submit" class="btn btn-danger p-0 w-75" name="delete_date" style="font-size:12px" value="' . $day->authReserveDate($day->everyDay())->first()->setting_reserve . '">' . $reservePart . '</button>';
+            $html[] = '<input type="hidden" name="getPart[]" value="" form="reserveParts">';
+          }
+        } else {
+          $html[] = $day->selectPart($day->everyDay());
+        }
+        $html[] = $day->getDate();
         $html[] = '</td>';
       }
       $html[] = '</tr>';
     }
-
     $html[] = '</tbody>';
     $html[] = '</table>';
     $html[] = '</div>';
@@ -101,19 +101,5 @@ class CalendarView
       $tmpDay->addDay(7);
     }
     return $weeks;
-  }
-
-  private function getReservePartText($reservePart)
-  {
-    switch ($reservePart) {
-      case 1:
-        return "リモ1部";
-      case 2:
-        return "リモ2部";
-      case 3:
-        return "リモ3部";
-      default:
-        return "";
-    }
   }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Calendars\Admin;
 
 use Carbon\Carbon;
@@ -28,6 +29,11 @@ class CalendarWeekDay
     return $this->carbon->format("Y-m-d");
   }
 
+  function getReservationLink($date, $part, $count)
+  {
+    return '<a href="' . route('calendar.reserve_detail', ['date' => $date, 'part' => $part]) . '">' . $count . '</a>';
+  }
+
   function dayPartCounts($ymd)
   {
     $html = [];
@@ -36,22 +42,13 @@ class CalendarWeekDay
     $three_part = ReserveSettings::with('users')->where('setting_reserve', $ymd)->where('setting_part', '3')->count();
 
     $html[] = '<div class="text-left">';
-    if ($one_part > 0) {
-      $html[] = '<p class="day_part m-0 pt-1"><a href="' . route('calendar.reserve_detail', ['date' => $ymd, 'part' => 1]) . '">1部</a>' . $one_part . '</p>';
-    }
-    if ($two_part > 0) {
-      $html[] = '<p class="day_part m-0 pt-1"><a href="' . route('calendar.reserve_detail', ['date' => $ymd, 'part' => 2]) . '">2部</a>' . $two_part . '</p>';
-    }
-    if ($three_part > 0) {
-      $html[] = '<p class="day_part m-0 pt-1"><a href="' . route('calendar.reserve_detail', ['date' => $ymd, 'part' => 3]) . '">3部</a>' . $three_part . '</p>';
-    }
+    $html[] = '<p class="day_part m-0 pt-1">1部 ' . $this->getReservationLink($ymd, 1, $one_part) . '</p>';
+    $html[] = '<p class="day_part m-0 pt-1">2部 ' . $this->getReservationLink($ymd, 2, $two_part) . '</p>';
+    $html[] = '<p class="day_part m-0 pt-1">3部 ' . $this->getReservationLink($ymd, 3, $three_part) . '</p>';
     $html[] = '</div>';
-
-    //リンク・人数//
 
     return implode("", $html);
   }
-
 
   function onePartFrame($day)
   {
@@ -63,6 +60,7 @@ class CalendarWeekDay
     }
     return $one_part_frame;
   }
+
   function twoPartFrame($day)
   {
     $two_part_frame = ReserveSettings::where('setting_reserve', $day)->where('setting_part', '2')->first();
@@ -73,6 +71,7 @@ class CalendarWeekDay
     }
     return $two_part_frame;
   }
+
   function threePartFrame($day)
   {
     $three_part_frame = ReserveSettings::where('setting_reserve', $day)->where('setting_part', '3')->first();
@@ -84,7 +83,6 @@ class CalendarWeekDay
     return $three_part_frame;
   }
 
-  //
   function dayNumberAdjustment()
   {
     $html = [];
