@@ -19,10 +19,10 @@ class UsersTableSeeder extends Seeder
                 'under_name' => '次郎',
                 'over_name_kana' => 'サトウ',
                 'under_name_kana' => 'ジロウ',
-                'mail_address' => 'hogehoges@ymail.com',
+                'mail_address' => 'hogehogess@ymail.com',
                 'sex' => '1',
                 'birth_day' => '1989-03-10',
-                'role' => '2',
+                'role' => '4',
                 'password' => 'sato3100',
                 'remember_token' => ''
             ],

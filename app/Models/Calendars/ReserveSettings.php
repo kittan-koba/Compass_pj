@@ -19,6 +19,6 @@ class ReserveSettings extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_reserve_settings', 'reserve_setting_id', 'user_id');
+        return $this->belongsToMany(User::class, 'reserve_setting_users', 'reserve_setting_id', 'user_id');
     }
 }

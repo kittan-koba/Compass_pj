@@ -69,7 +69,7 @@ class User extends Authenticatable
 
     public function reserveSettings()
     {
-        return $this->belongsToMany(ReserveSettings::class, 'user_reserve_settings', 'user_id', 'reserve_setting_id');
+        return $this->belongsToMany(ReserveSettings::class, 'reserve_setting_users', 'user_id', 'reserve_setting_id');
     }
 
     public function subjects()
