@@ -21,7 +21,7 @@ class PostsController extends Controller
         $categories = MainCategory::get();
         $like = new Like;
         $post_comment = new Post;
-        if (!empty ($request->keyword)) {
+        if (!empty($request->keyword)) {
             $posts = Post::with('user', 'postComments')
                 ->where('post_title', 'like', '%' . $request->keyword . '%')
                 ->orWhere('post', 'like', '%' . $request->keyword . '%')->get();
@@ -100,14 +100,15 @@ class PostsController extends Controller
     {
 
 
-        // サブカテゴリーを作成する際に、選択されたメインカテゴリーのIDを指定して保存する
         SubCategory::create([
             'sub_category' => $request->sub_category_name,
-            'main_category_id' => $request->main_category_id
+            'main_category_id' => $request->main_category_id,
         ]);
 
         return redirect()->route('post.input');
     }
+
+
 
 
     public function commentCreate(Request $request)

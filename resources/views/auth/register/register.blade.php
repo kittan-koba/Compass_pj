@@ -20,8 +20,8 @@
           <div class="d-flex mt-3" style="justify-content:space-between">
             <div class="" style="width:140px">
               @if($errors->first('over_name'))
-              <span class="error_message">{{ $errors->first('over_name') }}</span>
-              @endif
+          <span class="error_message">{{ $errors->first('over_name') }}</span>
+        @endif
               <label class="d-block m-0" style="font-size:13px">姓</label>
               <div class="border-bottom border-primary" style="width:140px;">
                 <input type="text" style="width:140px;" class="border-0 over_name" name="over_name">
@@ -29,8 +29,8 @@
             </div>
             <div class="" style="width:140px">
               @if($errors->first('under_name'))
-              <span class="error_message">{{ $errors->first('under_name') }}</span>
-              @endif
+          <span class="error_message">{{ $errors->first('under_name') }}</span>
+        @endif
               <label class=" d-block m-0" style="font-size:13px">名</label>
               <div class="border-bottom border-primary" style="width:140px;">
                 <input type="text" style="width:140px;" class="border-0 under_name" name="under_name">
@@ -40,8 +40,8 @@
           <div class="d-flex mt-3" style="justify-content:space-between">
             <div class="" style="width:140px">
               @if($errors->first('over_name_kana'))
-              <span class="error_message">{{ $errors->first('over_name_kana') }}</span>
-              @endif
+          <span class="error_message">{{ $errors->first('over_name_kana') }}</span>
+        @endif
               <label class="d-block m-0" style="font-size:13px">セイ</label>
               <div class="border-bottom border-primary" style="width:140px;">
                 <input type="text" style="width:140px;" class="border-0 over_name_kana" name="over_name_kana">
@@ -49,8 +49,8 @@
             </div>
             <div class="" style="width:140px">
               @if($errors->first('under_name_kana'))
-              <span class="error_message">{{ $errors->first('under_name_kana') }}</span>
-              @endif
+          <span class="error_message">{{ $errors->first('under_name_kana') }}</span>
+        @endif
               <label class="d-block m-0" style="font-size:13px">メイ</label>
               <div class="border-bottom border-primary" style="width:140px;">
                 <input type="text" style="width:140px;" class="border-0 under_name_kana" name="under_name_kana">
@@ -63,8 +63,8 @@
               <input type="mail" class="w-100 border-0 mail_address" name="mail_address">
             </div>
             @if($errors->first('mail_address'))
-            <span class="error_message">{{ $errors->first('mail_address') }}</span>
-            @endif
+        <span class="error_message">{{ $errors->first('mail_address') }}</span>
+      @endif
           </div>
         </div>
         <div class="mt-3">
@@ -159,14 +159,14 @@
           </select>
           <label style="font-size:13px">日</label>
           @if($errors->first('old_year'))
-          <span class="error_message">{{ $errors->first('old_year') }}</span>
-          @endif
+        <span class="error_message">{{ $errors->first('old_year') }}</span>
+      @endif
           @if($errors->first('old_month'))
-          <span class="error_message">{{ $errors->first('old_month') }}</span>
-          @endif
+        <span class="error_message">{{ $errors->first('old_month') }}</span>
+      @endif
           @if($errors->first('old_day'))
-          <span class="error_message">{{ $errors->first('old_day') }}</span>
-          @endif
+        <span class="error_message">{{ $errors->first('old_day') }}</span>
+      @endif
         </div>
         <div class="mt-3">
           <label class="d-block m-0" style="font-size:13px">役職</label>
@@ -182,11 +182,11 @@
         <div class="select_teacher d-none">
           <label class="d-block m-0" style="font-size:13px">選択科目</label>
           @foreach($subjects as $subject)
-          <div class="">
-            <input type="checkbox" name="subject[]" value="{{ $subject->id }}">
-            <label>{{ $subject->subject }}</label>
-          </div>
-          @endforeach
+        <div class="">
+        <input type="checkbox" name="subject[]" value="{{ $subject->id }}">
+        <label>{{ $subject->subject }}</label>
+        </div>
+      @endforeach
         </div>
         <div class="mt-3">
           <label class="d-block m-0" style="font-size:13px">パスワード</label>
@@ -197,12 +197,12 @@
         <div class="mt-3">
           <label class="d-block m-0" style="font-size:13px">確認用パスワード</label>
           <div class="border-bottom border-primary">
-            <input type="password" class="border-0 w-100 password_confirmation" name="password">
+            <input type="password" class="border-0 w-100 password_confirmation" name="password_confirmation">
           </div>
         </div>
         @if($errors->first('password'))
-        <span class="error_message">{{ $errors->first('password') }}</span>
-        @endif
+      <span class="error_message">{{ $errors->first('password') }}</span>
+    @endif
         <div class="mt-5 text-right">
           <input type="submit" class="btn btn-primary register_btn" disabled value="新規登録" onclick="return confirm('登録してよろしいですか？')">
         </div>
