@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Categories\MainCategory;
 use App\Models\Categories\SubCategory;
 use App\Http\Requests\MainCategoryRequest;
+use Illuminate\Support\Facades\Validator;
 
 class MainCategoryController extends Controller
 {
