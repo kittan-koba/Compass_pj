@@ -25,6 +25,13 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param  array  $data
+     * @return \App\User
+     */
+
     public function registerView()
     {
         $subjects = Subjects::all();
@@ -36,7 +43,11 @@ class RegisterController extends Controller
 
         DB::beginTransaction();
         try {
-            $birth_day = sprintf('%04d-%02d-%02d', $request->old_year, $request->old_month, $request->old_day);
+            $old_year = $request->old_year;
+            $old_month = $request->old_month;
+            $old_day = $request->old_day;
+            $data = $old_year . '-' . $old_month . '-' . $old_day;
+            $birth_day = date('Y-m-d', strtotime($data));
             $subjects = $request->subject;
 
             $user_get = User::create([

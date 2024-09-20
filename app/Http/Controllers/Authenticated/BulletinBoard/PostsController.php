@@ -12,6 +12,7 @@ use App\Models\Posts\Like;
 use App\Models\Users\User;
 use App\Http\Requests\BulletinBoard\PostFormRequest;
 use Auth;
+use Illuminate\Validation\Rule;
 
 class PostsController extends Controller
 {
@@ -99,6 +100,17 @@ class PostsController extends Controller
     public function subCategoryCreate(Request $request)
     {
 
+        $validated = $request->validate([
+            'main_category_id' => 'required|exists:main_categories,id',
+            'sub_category_name' => [
+                'required',
+                'string',
+                'max:100',
+                Rule::unique('sub_categories', 'sub_category')->where(function ($query) use ($request) {
+                    return $query->where('main_category_id', $request->main_category_id);
+                }),
+            ],
+        ]);
 
         SubCategory::create([
             'sub_category' => $request->sub_category_name,
