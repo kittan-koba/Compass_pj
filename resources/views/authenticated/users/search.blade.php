@@ -105,7 +105,7 @@
           </div>
         </div>
         <div>
-          <input type="reset" value="リセット" form="userSearchRequest">
+          <input type="submit" value="リセット" form="userSearchRequest">
         </div>
         <div>
           <input type="submit" name="search_btn" value="検索" form="userSearchRequest">
