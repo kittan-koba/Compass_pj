@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Calendars\Admin;
 
 use Carbon\Carbon;
@@ -29,26 +28,41 @@ class CalendarWeekDay
     return $this->carbon->format("Y-m-d");
   }
 
-  function getReservationLink($date, $part, $count)
-  {
-    return '<a href="' . route('calendar.reserve_detail', ['date' => $date, 'part' => $part]) . '">' . $count . '</a>';
-  }
-
   function dayPartCounts($ymd)
   {
     $html = [];
-    $one_part = ReserveSettings::with('users')->where('setting_reserve', $ymd)->where('setting_part', '1')->count();
-    $two_part = ReserveSettings::with('users')->where('setting_reserve', $ymd)->where('setting_part', '2')->count();
-    $three_part = ReserveSettings::with('users')->where('setting_reserve', $ymd)->where('setting_part', '3')->count();
+    $one_part = ReserveSettings::with('users')->where('setting_reserve', $ymd)->where('setting_part', '1')->first();
+    $two_part = ReserveSettings::with('users')->where('setting_reserve', $ymd)->where('setting_part', '2')->first();
+    $three_part = ReserveSettings::with('users')->where('setting_reserve', $ymd)->where('setting_part', '3')->first();
 
     $html[] = '<div class="text-left">';
-    $html[] = '<p class="day_part m-0 pt-1">1部 ' . $this->getReservationLink($ymd, 1, $one_part) . '</p>';
-    $html[] = '<p class="day_part m-0 pt-1">2部 ' . $this->getReservationLink($ymd, 2, $two_part) . '</p>';
-    $html[] = '<p class="day_part m-0 pt-1">3部 ' . $this->getReservationLink($ymd, 3, $three_part) . '</p>';
+    if ($one_part) {
+      // dd($one_part);
+      $html[] = '<a href="' . route('calendar.admin.detail', ['date' => $ymd, 'part' => '1']) . '" class="sett_a">1部 </a>';
+      $html[] = '<a class="m-0 pt-1 sett_text">' . $one_part->users->count() . '人</a><br>';
+    } else {
+      $html[] = '<a href="' . route('calendar.admin.detail', ['date' => $ymd, 'part' => '1']) . '" class="sett_a">1部 </a>';
+      $html[] = '<a class="m-0 pt-1">' . '<span class="sett_text">0人</span><br>';
+    }
+    if ($two_part) {
+      $html[] = '<a href="' . route('calendar.admin.detail', ['date' => $ymd, 'part' => '2']) . '" class="sett_a">2部 </a>';
+      $html[] = '<span class="m-0 pt-1 sett_text">' . $two_part->users->count() . '人</span><br>';
+    } else {
+      $html[] = '<a href="' . route('calendar.admin.detail', ['date' => $ymd, 'part' => '2']) . '" class="sett_a">2部 </a>';
+      $html[] = '<a class="m-0 pt-1">' . '<span class="sett_text">0人</span><br>';
+    }
+    if ($three_part) {
+      $html[] = '<a href="' . route('calendar.admin.detail', ['date' => $ymd, 'part' => '3']) . '" class="sett_a">3部 </a>';
+      $html[] = '<span class="m-0 pt-1 sett_text">' . $three_part->users->count() . '人</span><br>';
+    } else {
+      $html[] = '<a href="' . route('calendar.admin.detail', ['date' => $ymd, 'part' => '3']) . '" class="sett_a">3部 </a>';
+      $html[] = '<a class="m-0 pt-1">' . '<span class="sett_text">0人</span><br>';
+    }
     $html[] = '</div>';
 
     return implode("", $html);
   }
+
 
   function onePartFrame($day)
   {
@@ -60,7 +74,6 @@ class CalendarWeekDay
     }
     return $one_part_frame;
   }
-
   function twoPartFrame($day)
   {
     $two_part_frame = ReserveSettings::where('setting_reserve', $day)->where('setting_part', '2')->first();
@@ -71,7 +84,6 @@ class CalendarWeekDay
     }
     return $two_part_frame;
   }
-
   function threePartFrame($day)
   {
     $three_part_frame = ReserveSettings::where('setting_reserve', $day)->where('setting_part', '3')->first();
@@ -83,6 +95,7 @@ class CalendarWeekDay
     return $three_part_frame;
   }
 
+  //
   function dayNumberAdjustment()
   {
     $html = [];

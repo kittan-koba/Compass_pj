@@ -66,6 +66,11 @@ li{
   width:70%;
 }
 
+.sett_a {
+  font-size: 12px;
+  color: #03AAD2;
+}
+
 /* モーダル */
 .modal{
     display: none;

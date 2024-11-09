@@ -7,52 +7,54 @@
     @foreach($users as $user)
     <div class="border one_person">
       <div>
-      <span>ID : </span><span>{{ $user->id }}</span>
+        <span>ID : </span><span>{{ $user->id }}</span>
       </div>
       <div><span>名前 : </span>
-      <a href="{{ route('user.profile', ['id' => $user->id]) }}">
-        <span>{{ $user->over_name }}</span>
-        <span>{{ $user->under_name }}</span>
-      </a>
+        <a href="{{ route('user.profile', ['id' => $user->id]) }}">
+          <span>{{ $user->over_name }}</span>
+          <span>{{ $user->under_name }}</span>
+        </a>
       </div>
       <div>
-      <span>カナ : </span>
-      <span>({{ $user->over_name_kana }}</span>
-      <span>{{ $user->under_name_kana }})</span>
+        <span>カナ : </span>
+        <span>({{ $user->over_name_kana }}</span>
+        <span>{{ $user->under_name_kana }})</span>
       </div>
       <div>
-      @if($user->sex == 1)
-      <span>性別 : </span><span>男</span>
-    @elseif($user->sex == 2)
-      <span>性別 : </span><span>女</span>
-    @else
-      <span>性別 : </span><span>その他</span>
-    @endif
+        @if($user->sex == 1)
+        <span>性別 : </span><span>男</span>
+        @elseif($user->sex == 2)
+        <span>性別 : </span><span>女</span>
+        @else
+        <span>性別 : </span><span>その他</span>
+        @endif
       </div>
       <div>
-      <span>生年月日 : </span><span>{{ $user->birth_day }}</span>
+        <span>生年月日 : </span><span>{{ $user->birth_day }}</span>
       </div>
       <div>
-      @if($user->role == 1)
-      <span>権限 : </span><span>教師(国語)</span>
-    @elseif($user->role == 2)
-      <span>権限 : </span><span>教師(数学)</span>
-    @elseif($user->role == 3)
-      <span>権限 : </span><span>講師(英語)</span>
-    @else
-      <span>権限 : </span><span>生徒</span>
-    @endif
+        @if($user->role == 1)
+        <span>権限 : </span><span>教師(国語)</span>
+        @elseif($user->role == 2)
+        <span>権限 : </span><span>教師(数学)</span>
+        @elseif($user->role == 3)
+        <span>権限 : </span><span>講師(英語)</span>
+        @else
+        <span>権限 : </span><span>生徒</span>
+        @endif
       </div>
       <div>
-      @if ($user->role == 4)
-      <span>選択科目 :</span>
-      @foreach ($user->subjects as $subject)
-      <span>{{ $subject->subject }}</span>
-    @endforeach
-    @endif
+        <!-- @foreachで選択科目を抽出する必要がある。
+      ただ科目を引き抜くだけじゃ誰がどの科目を選択しているかわからないので、userテーブルとsubjectテーブルの中間テーブルから抽出する -->
+        @if ($user->role == 4)
+        <span>選択科目 :</span>
+        @foreach ($user->subjects as $subject)
+        <span>{{ $subject->subject }}</span>
+        @endforeach
+        @endif
       </div>
     </div>
-  @endforeach
+    @endforeach
   </div>
 
 
@@ -98,10 +100,11 @@
           </div>
           <div class="selected_engineer">
             <label>選択科目</label>
+            <!-- @foreachを使ってsubjectテーブルから科目を抽出する -->
             @foreach ($subjects as $subject)
-        <option>{{ $subject->subject }}</option>
-        <input type="checkbox" name="subject[]" value="{{ $subject->id }}" form="userSearchRequest" style="margin-right: 10px;">
-      @endforeach
+            <option>{{ $subject->subject }}</option>
+            <input type="checkbox" name="subject[]" value="{{ $subject->id }}" form="userSearchRequest" style="margin-right: 10px;">
+            @endforeach
           </div>
         </div>
         <div>

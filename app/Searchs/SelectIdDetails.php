@@ -33,6 +33,7 @@ class SelectIdDetails implements DisplayUsers
       })
       ->whereHas('subjects', function ($q) use ($subjects) {
         $q->whereIn('subjects.id', $subjects);
+        // この行の$q->where('subject.id',$subject)のwhereをwhereInにすることで複数の値のいずれかと一致するレコードを検索させるようにする
       })
       ->orderBy('id', $updown)->get();
     return $users;

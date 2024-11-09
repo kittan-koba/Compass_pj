@@ -2,67 +2,42 @@
 
 @section('content')
 <div class="vh-100 pt-5" style="background:#ECF1F6;">
-  <div class="border w-75 m-auto pt-5 pb-5" style="border-radius:5px; background:#FFF;">
-    <div class="w-75 m-auto border" style="border-radius:5px;">
+  <div class="border w-75 m-auto pb-5" style=" box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2); border-radius: 15px; padding: 20px; background:#FFF;">
+    <div class="w-75 m-auto" style="border-radius:5px;">
 
-      <p class="text-center">{{ $calendar->getTitle() }}</p>
+      <p class="text-center" style="font-size: 18px; font-weight: bold;">{{ $calendar->getTitle() }}</p>
       <div class="">
         {!! $calendar->render() !!}
       </div>
     </div>
-    <div class="text-right w-75 m-auto">
+    <div class="text-right w-70 m-auto" style="margin-top: 20px;">
       <input type="submit" class="btn btn-primary" value="予約する" form="reserveParts">
     </div>
   </div>
 </div>
 
-<!-- フラッシュメッセージの表示 -->
-@if (session('success'))
-<div class="alert alert-success">
-  {{ session('success') }}
-</div>
-@endif
+<!-- ここから下新規実装するモーダル -->
 
-@if (session('error'))
-<div class="alert alert-danger">
-  {{ session('error') }}
-</div>
-@endif
-
-<!-- キャンセル確認モーダル -->
-<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">キャンセル確認</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+<div class="delete_modal modal">
+  <div class="modal__bg modal_close"></div>
+  <div class="modal__content">
+    <form action="{{ route('deleteParts') }}" method="post">
+      @csrf
+      {{-- 表示用 --}}
+      <div class="btn_modal">
+        <div class="reserve_date"></div>
+        <div class="reserve_part"></div>
+        <p>こちらの予約をキャンセルしますか？</p>
+        <div class="btn_area">
+          <a class="modal_close btn btn-primary" href="">戻る</a>
+          <input type="submit" class="m-auto btn btn-danger" href="/delete/calendar" value="キャンセル">
+        </div>
       </div>
-      <div class="modal-body">
-        <p>予約日: <span id="modal-date"></span></p>
-        <p>予約時間: <span id="modal-time"></span></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
-        <button type="button" class="btn btn-danger" id="confirmCancel">キャンセルする</button>
-      </div>
-    </div>
+      {{-- 送信用 --}}
+      <input type="hidden" name="reserve_date" class="reserve_date" value="">
+      <input type="hidden" name="reserve_part" class="reserve_part" value="">
+    </form>
   </div>
 </div>
 
 @endsection
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.cancel-button').forEach(button => {
-    button.addEventListener('click', function() {
-      const date = this.dataset.date;
-      const time = this.dataset.time;
-      document.getElementById('modal-date').innerText = date;
-      document.getElementById('modal-time').innerText = time;
-      $('#cancelModal').modal('show');
-    });
-  });
-});
-</script>
